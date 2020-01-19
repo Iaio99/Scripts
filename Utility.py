@@ -119,7 +119,7 @@ def Geometria(cap, options=None):
 
     elif int(cap)==8:
         open_file("Esercizi Svolti.pdf")
-    else:
+    elif int(cap)==9:
         open_file("Appunti.tex")
 
 def Usage():
@@ -135,10 +135,17 @@ if __name__ == "__main__":
        Usage()
 
     elif sys.argv[1]=="-g" or sys.argv[1]=="--geometry":
-        Geometria(sys.argv[2])
+        try:
+            Geometria(sys.argv[2])
+        except IndexError:
+            print("Capitolo non specificato")
+            return None
 
     elif sys.argv[1]=="-ce" or sys.argv[1]=="--calcolari":
         Calcolatori()
         
     elif sys.argv[1]=="-ia" or sys.argv[1]=="--algoritmi":
         Algoritmi()
+
+    elif sys.argv[1]=="-anII" or sys.argv[1]=="--anailisiII":
+        Analisi2
