@@ -90,7 +90,8 @@ def Utility_Windows():
 
     else:
         print("Opzione non valida")
-
-    Utility_Windows()
-
+        Utility_Windows()
+       
+    sys.exit()
+    
 Utility_Windows()
