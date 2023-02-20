@@ -14,4 +14,3 @@ iptables -A INPUT -p tcp --syn -m conntrack --ctstate NEW -j TCP
 iptables -A INPUT -p udp -j REJECT --reject-with icmp-port-unreachable
 iptables -A INPUT -p tcp -j REJECT --reject-with tcp-reset
 iptables -A INPUT -j REJECT --reject-with icmp-proto-unreachable
-
