@@ -8,7 +8,7 @@ from subprocess import getoutput
 
 
 def check_networkmanager():
-    return which(name) is not None
+    return which("nmcli") is not None
 
 
 def make_hotspot(ssid, password, ifname, con_name):
@@ -35,4 +35,3 @@ if __name__ == "__main__":
         sys.exit(2)
 
     make_hotspot(args.ssid, args.password, args.ifname, args.con_name)
-    
