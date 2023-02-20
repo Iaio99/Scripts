@@ -1,5 +1,24 @@
 #!/bin/sh
 
+
+echo "Resetting iptables Rules..."
+iptables -F
+iptables -X
+iptables -t nat -F
+iptables -t nat -X
+iptables -t mangle -F
+iptables -t mangle -X
+iptables -t raw -F
+iptables -t raw -X
+iptables -t security -F
+iptables -t security -X
+iptables -P INPUT ACCEPT
+iptables -P FORWARD ACCEPT
+iptables -P OUTPUT ACCEPT
+echo "Done"
+
+
+#Start of firewall setup
 iptables -N TCP
 iptables -N UDP
 iptables -P FORWARD DROP
@@ -21,7 +40,7 @@ iptables -A TCP -p tcp --dport 22 -j ACCEPT
 sysctl net.ipv4.conf.all.rp_filter=1
 
 #Block ping request
-net.ipv4.icmp_echo_ignore_all=1
+sysctl net.ipv4.icmp_echo_ignore_all=1
 
 #Protection against SYN scans
 iptables -I TCP -p tcp -m recent --update --rsource --seconds 60 --name TCP-PORTSCAN -j REJECT --reject-with tcp-reset
@@ -46,3 +65,15 @@ iptables -A IN_SSH -m recent --name sshbf --rttl --rcheck --hitcount 4 --seconds
 iptables -A IN_SSH -m recent --name sshbf --set -j ACCEPT
 iptables -A LOG_AND_DROP -j LOG --log-prefix "iptables deny: " --log-level 7
 iptables -A LOG_AND_DROP -j DROP
+
+#IPv6
+#cp /etc/iptables/iptables.rules /etc/iptables/ip6tables.rules
+#ip6tables -A INPUT -p ipv6-icmp --icmpv6-type 128 -m conntrack --ctstate NEW -j ACCEPT
+#ip6tables -A INPUT -s fe80::/10 -p ipv6-icmp -j ACCEPT
+#ip6tables -A INPUT -p udp --sport 547 --dport 546 -j ACCEPT
+#ip6tables -t mangle -A PREROUTING -m rpfilter -j ACCEPT
+#ip6tables -t mangle -A PREROUTING -j DROP
+
+#Save
+iptables-save -f /etc/iptables/iptables.rules
+#ip6tables-save -f /etc/iptables/#ip6tables.rules
