@@ -43,7 +43,9 @@ def conversion():
     
     for v in videos:
         if not v.endswith("mp4"):
-            if os.system(f"ffmpeg -i {v} -codec copy {v[:v.rfind('.')]}.mp4"):
+            e = os.system(f'ffmpeg -i """{v}""" -codec copy """{v[:v.rfind(".")]}.mp4"""')
+            print(e)
+            if e:
                 os.remove(f"{v[:v.rfind('.')]}.mp4")
                 return False
             
