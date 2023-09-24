@@ -7,7 +7,3 @@ A series of scripts for automate a series of (boring) tasks.
 * `hotspot.py`: This script setup and start and hotspot wifi through Network Manager.
 
 * `CustomGrub.py`: This script edit `/etc/grub/40-custom` and adds some voices, then it regenarete the `grub.cfg`.
-
-## Description of Systemd units
-
-* `update-shutdown.service`: This unit file check for updates and upgrade the system before shutdown. It's configured for Arch-based distribution, but it's adaptable to others.
