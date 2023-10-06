@@ -72,7 +72,7 @@ if __name__ == "__main__":
             print("ERROR: Directory not found")
             exit(-1)
     else:
-        os.chdir(args.directory)
+        os.chdir("./")
 
     if args.compress:
         if args.compress == "cpu":
