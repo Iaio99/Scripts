@@ -23,7 +23,7 @@ def __get_videos():
     return videos 
     
 
-def compression():
+def compression(acceleration):
     videos = __get_videos()
 
     if not os.path.exists("output"):
@@ -31,7 +31,7 @@ def compression():
 
     for v in videos:
         if not os.path.exists(f"output/{v}"):
-            if os.system(f"ffmpeg -i '{v}' -vcodec libx265 -crf 30 'output/{v}'"):
+            if os.system(f"ffmpeg -i '{v}' -vcodec {acceleration} -crf 30 'output/{v}'"):
                 os.remove(f"output/{v}")
                 return False
     
@@ -55,7 +55,7 @@ def conversion():
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-d", "--directory", help="Directory of videos", default="",action="store")
-parser.add_argument("-x", "--compress", help="compress videos in the directory specified", action="store_true")
+parser.add_argument("-x", "--compress", choices=['gpu', 'cpu'], help="compress videos in the directory specified")
 parser.add_argument("-c", "--convert", help="convert videos in the directory specified", action="store_true")
 
 args = parser.parse_args()
@@ -71,12 +71,16 @@ if __name__ == "__main__":
         except FileNotFoundError:
             print("ERROR: Directory not found")
             exit(-1)
-
     else:
         os.chdir(args.directory)
 
     if args.compress:
-        if not compression():
+        if args.compress == "cpu":
+            acceleration = "libx264"
+        elif args.compress == "gpu":
+            acceleration = "h264_nvenc"
+
+        if not compression(acceleration):
             print("ERROR: Compression Failed")
             exit(-1)
     
