@@ -55,7 +55,7 @@ def conversion():
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-d", "--directory", help="Directory of videos", default="",action="store")
-parser.add_argument("-x", "--compress", choices=['gpu', 'cpu'], help="compress videos in the directory specified")
+parser.add_argument("-x", "--compress", choices=["gpu", "cpu"], help="compress videos in the directory specified", default="cpu")
 parser.add_argument("-c", "--convert", help="convert videos in the directory specified", action="store_true")
 
 args = parser.parse_args()
