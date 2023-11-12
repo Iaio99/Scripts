@@ -3,6 +3,7 @@
 import argparse
 import mimetypes
 import os
+import sys
 
 def __get_videos():
     videos = os.listdir()
@@ -20,27 +21,27 @@ def __get_videos():
 
     print(videos)
 
-    return videos 
-    
+    return videos
+
 
 def compression(acceleration):
     videos = __get_videos()
 
     if not os.path.exists("output"):
-	    os.mkdir("output")
+        os.mkdir("output")
 
     for v in videos:
         if not os.path.exists(f"output/{v}"):
             if os.system(f"ffmpeg -i '{v}' -vcodec {acceleration} -crf 30 'output/{v}'"):
                 os.remove(f"output/{v}")
                 return False
-    
+
     return True
 
 
 def conversion():
     videos = __get_videos()
-    
+
     for v in videos:
         if not v.endswith("mp4"):
             e = os.system(f'ffmpeg -i """{v}""" -codec copy """{v[:v.rfind(".")]}.mp4"""')
@@ -48,7 +49,7 @@ def conversion():
             if e:
                 os.remove(f"{v[:v.rfind('.')]}.mp4")
                 return False
-            
+
             os.remove(v)
 
     return True
@@ -74,19 +75,19 @@ if __name__ == "__main__":
     else:
         os.chdir("./")
 
-    if args.compress:
+    if args.compress and not args.convert:
         if args.compress == "cpu":
-            acceleration = "libx264"
+            ret = compression("libx264")
         elif args.compress == "gpu":
-            acceleration = "h264_nvenc"
+            ret = compression("h264_nvenc")
 
-        if not compression(acceleration):
+        if not ret:
             print("ERROR: Compression Failed")
-            exit(-1)
-    
+            sys.exit(-1)
+
     if args.convert:
         if not conversion():
             print("ERROR: Conversion Failed")
-            exit(-1)
+            sys.exit(-1)
 
-    exit(0)
+    sys.exit(0)
